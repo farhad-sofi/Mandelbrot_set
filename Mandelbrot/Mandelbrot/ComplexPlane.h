@@ -2,6 +2,7 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <string>
+#include <sstream>
 
 using namespace sf;
 using namespace std;
