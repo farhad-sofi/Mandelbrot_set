@@ -48,8 +48,8 @@ int main()
 		{
 			window.close();
 		}
-		Mandelbrot.updateRender(Instructions);
-		Mandelbrot.loadText();
+		Mandelbrot.updateRender();
+		Mandelbrot.loadText(Instructions);
 
 		window.clear();
 
