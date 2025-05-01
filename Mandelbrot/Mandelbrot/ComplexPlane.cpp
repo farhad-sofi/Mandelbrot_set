@@ -56,28 +56,94 @@ void ComplexPlane::zoomOut()
 	m_state = Calculating;
 }
 
-void ComplexPlane::setMouseLocation(Vector2i mousPixel)
+void ComplexPlane::setCenter(Vector2i mousePixel)
 {
-	Vector2f pixelCoords = mapPixelToCoords();
-	m_mouselocation = pixelCoords;
+	m_plane_center = mapPixelToCoords(mousePixel);
+	m_state = Calculating;
 }
 
-void ComplexPlane::loadText(Text& text)
-{
-
+void ComplexPlane::setMouseLocation(Vector2i mousePixel) {
+    m_mouselocation = mapPixelToCoords(mousePixel);
 }
 
-size_t ComplexPlane::countIterations(Vector2f coord)
-{
 
+void ComplexPlane::loadText(Text& text) {
+    stringstream ss;
+
+    ss << fixed;
+    ss.precision(5); 
+
+    ss << "Cursor: (" << m_mouselocation.x << ", " << m_mouselocation.y << ")\n";
+    ss << "Center: (" << m_plane_center.x << ", " << m_plane_center.y << ")";
+
+    text.setString(ss.str());
 }
 
-void ComplexPlane::iterationsToRGB(size_t count, Uint& r, Uint& g, Uint& b)
-{
 
+size_t ComplexPlane::countIterations(Vector2f coord) {
+    float x = 0.0f;
+    float y = 0.0f;
+
+    size_t count = 0;
+
+    while (x * x + y * y <= 4.0f && count < MAX_ITER) {
+        float xTemp = x * x - y * y + coord.x;
+        y = 2.0f * x * y + coord.y;
+        x = xTemp;
+        count++;
+    }
+
+    return count;
 }
+
+void ComplexPlane::iterationsToRGB(size_t count, Uint8& r, Uint8& g, Uint8& b) {
+    if (count >= MAX_ITER) {
+        r = g = b = 0;
+        return;
+    }
+
+    float t = static_cast<float>(count) / MAX_ITER;
+
+    if (t < 0.2f) {
+        r = static_cast<Uint8>(128 - t * 640); 
+        g = 0;
+        b = static_cast<Uint8>(255);
+    }
+    else if (t < 0.4f) {
+
+        r = 0;
+        g = static_cast<Uint8>(255 * (t - 0.2f) / 0.2f); 
+        b = 255;
+    }
+    else if (t < 0.6f) {
+        r = 0;
+        g = 255;
+        b = static_cast<Uint8>(255 - 255 * (t - 0.4f) / 0.2f); 
+    }
+    else if (t < 0.8f) {
+        r = static_cast<Uint8>(255 * (t - 0.6f) / 0.2f); 
+        g = 255;
+        b = 0;
+    }
+    else {
+        r = 255;
+        g = static_cast<Uint8>(255 - 255 * (t - 0.8f) / 0.2f); 
+        b = 0;
+    }
+}
+
 
 Vector2f ComplexPlane::mapPixelToCoords(Vector2i mousePixel)
 {
+	int pixelX = mousePixel.x;
+	int pixelY = mousePixel.y;
+
+	float left = m_plane_center.x - m_plane_size.x / 2.0f;
+	float top = m_plane_center.y + m_plane_size.y / 2.0f;
+
+	float real = ((pixelX - 0) / static_cast<float>(m_pixel_size.x)) * m_plane_size.x + left;
+	float imag = ((pixelY - m_pixel_size.y) / static_cast<float>(-m_pixel_size.y)) * m_plane_size.y + top;
+
+	return Vector2f(real, imag);
 
 }
