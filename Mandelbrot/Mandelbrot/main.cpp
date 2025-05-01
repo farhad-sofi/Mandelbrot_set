@@ -1,72 +1,67 @@
 #include <SFML/Graphics.hpp>
-#include <iostream>
 #include "ComplexPlane.h"
-
 
 using namespace sf;
 using namespace std;
 
-
 int main()
 {
-	int pixelWidth = VideoMode::getDesktopMode().width / 2;
-	int pixelHeight = VideoMode::getDesktopMode().height / 2;
-	VideoMode vm(pixelWidth, pixelHeight);
-	RenderWindow window(vm, "Mandelbrot Set", Style::Default);
+    int pixelWidth = VideoMode::getDesktopMode().width;
+    int pixelHeight = VideoMode::getDesktopMode().height;
+    VideoMode vm(pixelWidth, pixelHeight);
+    RenderWindow window(vm, "Mandelbrot Set", Style::Default);
 
-	ComplexPlane Mandelbrot(pixelWidth, pixelHeight);
-	
-	Font font;
-	font.loadFromFile("times.ttf");
+    ComplexPlane Mandelbrot(pixelWidth, pixelHeight);
 
-	Text Instructions("", font, 24);
-	Instructions.setPosition(20, 20);
-	Instructions.setFillColor(Color::White);
+    Font font;
+    if (!font.loadFromFile("times.ttf")) {
+        cerr << "Failed to load font!" << endl;
+        return -1;
+    }
 
-	Event event;
+    Text Instructions("", font, 24);
+    Instructions.setPosition(20, 20);
+    Instructions.setFillColor(Color::White);
 
-	while (window.isOpen())
-{
-	
-	while (window.pollEvent(event))
-	{
-		///Input
-		if (event.type == Event::Closed)
-		{
-			window.close();
-		}
-		if (event.type == sf::Event::MouseButtonPressed)
-		{
-			if (event.mouseButton.button == sf::Mouse::Left)
-			{
+    Event event;
 
-				Mandelbrot.setCenter({ event.mouseButton.x, event.mouseButton.y });
-				Mandelbrot.zoomIn();
-			}
-			if (event.mouseButton.button == sf::Mouse::Right)
-			{
+    while (window.isOpen())
+    {
+        while (window.pollEvent(event))
+        {
+            if (event.type == Event::Closed)
+                window.close();
 
-				Mandelbrot.setCenter({ event.mouseButton.x, event.mouseButton.y });
-				Mandelbrot.zoomOut();
-			}
-		}
-		if (event.type == Event::MouseMoved)
-		{
-			Mandelbrot.setMouseLocation({ event.mouseButton.x, event.mouseButton.y });
-		}
-		if (Keyboard::isKeyPressed(Keyboard::Escape))
-		{
-			window.close();
-		}
-	}
-		Mandelbrot.updateRender();
-		Mandelbrot.loadText(Instructions);
+            if (event.type == Event::MouseButtonPressed)
+            {
+                if (event.mouseButton.button == Mouse::Left)
+                {
+                    Mandelbrot.setCenter({ event.mouseButton.x, event.mouseButton.y });
+                    Mandelbrot.zoomIn();
+                }
+                else if (event.mouseButton.button == Mouse::Right)
+                {
+                    
+                    Mandelbrot.setCenter({ event.mouseButton.x, event.mouseButton.y });
+                    Mandelbrot.zoomOut();
+                }
+            }
+            if (event.type == Event::KeyPressed && event.key.code == Keyboard::Escape)
+            {
+                window.close();
+            }
+        }
 
-		window.clear();
+        Mandelbrot.setMouseLocation(Mouse::getPosition(window));
 
-		window.draw(Mandelbrot);
-		window.draw(Instructions);
+        Mandelbrot.updateRender();
+        Mandelbrot.loadText(Instructions);
 
-		window.display();
+        window.clear();
+        window.draw(Mandelbrot);
+        window.draw(Instructions);
+        window.display();
+    }
 
-	}
+    return 0;
+}
