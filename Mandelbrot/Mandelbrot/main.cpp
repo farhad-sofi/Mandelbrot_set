@@ -19,23 +19,9 @@ int main()
 	Font font;
 	font.loadFromFile("times.ttf");
 
-	Text title("Mandelbrot Set", font, 24);
-	title.setPosition(20, 20);
-	title.setFillColor(Color::White);
-
-	Text mouseActions("", font, 24);
-	mouseActions.setPosition(20, 40);
-	mouseActions.setFillColor(Color::White);
-
-	Mandelbrot.loadText(mouseActions);
-
-	Text zoomOut("Zoom Out", font, 24);
-	zoomOut.setPosition(20, 80);
-	zoomOut.setFillColor(Color::White);
-
-	Text zoomIn("Zoom In", font, 24);
-	zoomIn.setPosition(20, 100);
-	zoomIn.setFillColor(Color::White);
+	Text Instructions("", font, 24);
+	Instructions.setPosition(20, 20);
+	Instructions.setFillColor(Color::White);
 
 	Event event;
 
