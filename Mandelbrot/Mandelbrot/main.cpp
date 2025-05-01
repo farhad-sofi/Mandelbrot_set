@@ -6,8 +6,8 @@ using namespace std;
 
 int main()
 {
-    int pixelWidth = VideoMode::getDesktopMode().width;
-    int pixelHeight = VideoMode::getDesktopMode().height;
+    int pixelWidth = VideoMode::getDesktopMode().width / 2;
+    int pixelHeight = VideoMode::getDesktopMode().height / 2;
     VideoMode vm(pixelWidth, pixelHeight);
     RenderWindow window(vm, "Mandelbrot Set", Style::Default);
 
