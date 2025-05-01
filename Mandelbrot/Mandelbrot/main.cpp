@@ -54,7 +54,7 @@ int main()
 		window.clear();
 
 		window.draw(Mandelbrot);
-		window.draw(Text);
+		window.draw(Instructions);
 
 		window.display();
 
