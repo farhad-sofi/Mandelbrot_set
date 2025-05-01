@@ -23,21 +23,19 @@ int main()
 	title.setPosition(20, 20);
 	title.setFillColor(Color::White);
 
-	Text center("", font, 24);
-	title.setPosition(20, 40);
-	title.setFillColor(Color::White);
+	Text mouseActions("", font, 24);
+	mouseActions.setPosition(20, 40);
+	mouseActions.setFillColor(Color::White);
 
-	Text cursor("", font, 24);
-	title.setPosition(20, 60);
-	title.setFillColor(Color::White);
+	Mandelbrot.loadText(mouseActions);
 
 	Text zoomOut("Zoom Out", font, 24);
-	title.setPosition(20, 80);
-	title.setFillColor(Color::White);
+	zoomOut.setPosition(20, 80);
+	zoomOut.setFillColor(Color::White);
 
 	Text zoomIn("Zoom In", font, 24);
-	title.setPosition(20, 100);
-	title.setFillColor(Color::White);
+	zoomIn.setPosition(20, 100);
+	zoomIn.setFillColor(Color::White);
 
 	Event event;
 
