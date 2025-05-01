@@ -48,17 +48,11 @@ int main()
 		{
 			if (event.mouseButton.button == sf::Mouse::Left)
 			{
-				/*std::cout << "the left button was pressed" << std::endl;
-				std::cout << "mouse x: " << event.mouseButton.x << std::endl;
-				std::cout << "mouse y: " << event.mouseButton.y << std::endl; */
 				Mandelbrot.setCenter({ event.mouseButton.x, event.mouseButton.y });
 				Mandelbrot.zoomIn();
 			}
 			if (event.mouseButton.button == sf::Mouse::Right)
 			{
-				/*std::cout << "the left button was pressed" << std::endl;
-				std::cout << "mouse x: " << event.mouseButton.x << std::endl;
-				std::cout << "mouse y: " << event.mouseButton.y << std::endl; */
 				Mandelbrot.setCenter({ event.mouseButton.x, event.mouseButton.y });
 				Mandelbrot.zoomOut();
 			}
