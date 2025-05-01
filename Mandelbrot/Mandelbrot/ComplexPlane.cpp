@@ -76,8 +76,11 @@ void ComplexPlane::loadText(Text& text) {
     ss << fixed;
     ss.precision(5); // Limit decimals for clean display
 
-    ss << "Cursor: (" << m_mouselocation.x << ", " << m_mouselocation.y << ")\n";
-    ss << "Center: (" << m_plane_center.x << ", " << m_plane_center.y << ")";
+    	ss << "MandelBrot Set" << endl;
+	ss << "Cursor: (" << m_mouselocation.x << ", " << m_mouselocation.y << ")\n";
+	ss << "Center: (" << m_plane_center.x << ", " << m_plane_center.y << ")" << endl;
+	ss << "Zoom In" << endl;
+	ss << "Zoom Out" << endl;
 
     text.setString(ss.str());
 }
