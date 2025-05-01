@@ -25,29 +25,40 @@ int main()
 
 	Event event;
 
+	while (window.isOpen())
+{
+	
 	while (window.pollEvent(event))
 	{
 		///Input
-		if (event.type == event.Closed) window.close();
-
+		if (event.type == Event::Closed)
+		{
+			window.close();
+		}
 		if (event.type == sf::Event::MouseButtonPressed)
 		{
 			if (event.mouseButton.button == sf::Mouse::Left)
 			{
+
 				Mandelbrot.setCenter({ event.mouseButton.x, event.mouseButton.y });
 				Mandelbrot.zoomIn();
 			}
 			if (event.mouseButton.button == sf::Mouse::Right)
 			{
+
 				Mandelbrot.setCenter({ event.mouseButton.x, event.mouseButton.y });
 				Mandelbrot.zoomOut();
 			}
 		}
-
+		if (event.type == Event::MouseMoved)
+		{
+			Mandelbrot.setMouseLocation({ event.mouseButton.x, event.mouseButton.y });
+		}
 		if (Keyboard::isKeyPressed(Keyboard::Escape))
 		{
 			window.close();
 		}
+	}
 		Mandelbrot.updateRender();
 		Mandelbrot.loadText(Instructions);
 
