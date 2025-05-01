@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 #include <sstream>
+#include <complex>
 
 using namespace sf;
 using namespace std;
@@ -12,7 +13,7 @@ const float BASE_WIDTH = 4.0;
 const float BASE_HEIGHT = 4.0;
 const float BASE_ZOOM = 0.5;
 
-enum State {Calculating, Displaying};
+enum State { Calculating, Displaying };
 
 class ComplexPlane : public Drawable {
 public:
@@ -36,7 +37,7 @@ private:
 	int m_zoomCount;
 	float m_aspectRatio;
 
-	int countIterations(Vector2f coord);
+	size_t countIterations(Vector2f coord);
 	void iterationsToRGB(size_t count, Uint8& r, Uint8& g, Uint8& b);
 	Vector2f mapPixelToCoords(Vector2i mousePixel);
 
