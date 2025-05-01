@@ -8,7 +8,9 @@ ComplexPlane::ComplexPlane(int pixelWidth, int pixelHeight)
     m_plane_size = { BASE_WIDTH, BASE_HEIGHT * m_aspectRatio };
     m_zoomCount = 0;
     m_state = State::Calculating;
-    VertexArray m_vArray(Points, pixelHeight * pixelWidth);
+    m_vArray.setPrimitiveType(Points);
+    m_vArray.resize(pixelWidth * pixelHeight);
+
 }
 
 
@@ -82,15 +84,13 @@ void ComplexPlane::loadText(Text& text) {
 
 
 size_t ComplexPlane::countIterations(Vector2f coord) {
-    float x = 0.0f;
-    float y = 0.0f;
+    using namespace std;
+    complex<double> c(coord.x, coord.y);
+    complex<double> z = c;
 
     size_t count = 0;
-
-    while (x * x + y * y <= 4.0f && count < MAX_ITER) {
-        float xTemp = x * x - y * y + coord.x;
-        y = 2.0f * x * y + coord.y;
-        x = xTemp;
+    while (abs(z) < 2.0 && count < MAX_ITER) {
+        z = z * z + c;
         count++;
     }
 
@@ -106,29 +106,29 @@ void ComplexPlane::iterationsToRGB(size_t count, Uint8& r, Uint8& g, Uint8& b) {
     float t = static_cast<float>(count) / MAX_ITER;
 
     if (t < 0.2f) {
-        r = static_cast<Uint8>(128 - t * 640); // 128 → 0
+        r = static_cast<Uint8>(128 - t * 640); 
         g = 0;
         b = static_cast<Uint8>(255);
     }
     else if (t < 0.4f) {
 
         r = 0;
-        g = static_cast<Uint8>(255 * (t - 0.2f) / 0.2f); // 0 → 255
+        g = static_cast<Uint8>(255 * (t - 0.2f) / 0.2f); 
         b = 255;
     }
     else if (t < 0.6f) {
         r = 0;
         g = 255;
-        b = static_cast<Uint8>(255 - 255 * (t - 0.4f) / 0.2f); // 255 → 0
+        b = static_cast<Uint8>(255 - 255 * (t - 0.4f) / 0.2f); 
     }
     else if (t < 0.8f) {
-        r = static_cast<Uint8>(255 * (t - 0.6f) / 0.2f); // 0 → 255
+        r = static_cast<Uint8>(255 * (t - 0.6f) / 0.2f); 
         g = 255;
         b = 0;
     }
     else {
         r = 255;
-        g = static_cast<Uint8>(255 - 255 * (t - 0.8f) / 0.2f); // 255 → 0
+        g = static_cast<Uint8>(255 - 255 * (t - 0.8f) / 0.2f); 
         b = 0;
     }
 }
@@ -156,3 +156,4 @@ Vector2f ComplexPlane::mapPixelToCoords(Vector2i mousePixel)
 
     return Vector2f(real, imag);
 }
+
