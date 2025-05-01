@@ -48,7 +48,7 @@ int main()
 		{
 			window.close();
 		}
-		Mandelbrot.updateRender();
+		Mandelbrot.updateRender(Instructions);
 		Mandelbrot.loadText();
 
 		window.clear();
