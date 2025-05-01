@@ -136,15 +136,23 @@ void ComplexPlane::iterationsToRGB(size_t count, Uint8& r, Uint8& g, Uint8& b) {
 
 Vector2f ComplexPlane::mapPixelToCoords(Vector2i mousePixel)
 {
-	int pixelX = mousePixel.x;
-	int pixelY = mousePixel.y;
+    float pX = static_cast<float>(mousePixel.x);
+    float pY = static_cast<float>(mousePixel.y);
 
-	float left = m_plane_center.x - m_plane_size.x / 2.0f;
-	float top = m_plane_center.y + m_plane_size.y / 2.0f;
+    float width = static_cast<float>(m_pixel_size.x);
+    float height = static_cast<float>(m_pixel_size.y);
 
-	float real = ((pixelX - 0) / static_cast<float>(m_pixel_size.x)) * m_plane_size.x + left;
-	float imag = ((pixelY - m_pixel_size.y) / static_cast<float>(-m_pixel_size.y)) * m_plane_size.y + top;
 
-	return Vector2f(real, imag);
+    float realMin = m_plane_center.x - m_plane_size.x / 2.0f;
+    float realMax = m_plane_center.x + m_plane_size.x / 2.0f;
 
+    float imagMin = m_plane_center.y - m_plane_size.y / 2.0f;
+    float imagMax = m_plane_center.y + m_plane_size.y / 2.0f;
+
+
+    float real = ((pX - 0.0f) / (width - 0.0f)) * (realMax - realMin) + realMin;
+
+    float imag = ((pY - height) / (0.0f - height)) * (imagMax - imagMin) + imagMin;
+
+    return Vector2f(real, imag);
 }
