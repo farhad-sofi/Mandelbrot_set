@@ -21,9 +21,9 @@ void ComplexPlane::updateRender()
 {
 	if (m_state == Calculating)
 	{
-		for (int j = 0; j < m_pixel_size.x; j++)
+		for (size_t j = 0; j < m_pixel_size.x; j++)
 		{
-			for (int i = 0; i < m_pixel_size.y; i++)
+			for (size_t i = 0; i < m_pixel_size.y; i++)
 			{
 				m_vArray[j + i * m_pixel_size.x].position = { (float)j, (float)i };
 				mapPixelToCoords();
