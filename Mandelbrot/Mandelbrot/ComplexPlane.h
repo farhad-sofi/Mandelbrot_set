@@ -4,6 +4,10 @@
 #include <string>
 #include <sstream>
 #include <complex>
+#include <thread>
+#include <vector>
+#include <cmath>
+
 
 using namespace sf;
 using namespace std;
