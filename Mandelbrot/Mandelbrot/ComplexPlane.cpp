@@ -22,23 +22,45 @@ void ComplexPlane::draw(RenderTarget& target, RenderStates states) const
 
 void ComplexPlane::updateRender()
 {
-    if (m_state == Calculating)
+    if (m_state != Calculating) return;
+
+    unsigned int numThreads = thread::hardware_concurrency();
+    if (numThreads == 0) numThreads = 4;
+
+    std::vector<thread> threads;
+    int rowsPerThread = m_pixel_size.y / numThreads;
+
+    for (unsigned int t = 0; t < numThreads; ++t)
     {
-        for (int j = 0; j < m_pixel_size.x; j++)
-        {
-            for (int i = 0; i < m_pixel_size.y; i++)
+        int startRow = t * rowsPerThread;
+        int endRow = (t == numThreads - 1) ? m_pixel_size.y : (t + 1) * rowsPerThread;
+
+        threads.emplace_back([=]() {
+            for (int y = startRow; y < endRow; ++y)
             {
-                m_vArray[j + i * m_pixel_size.x].position = { (float)j, (float)i };
-                Vector2f complexCoord = mapPixelToCoords({j, i});
-                size_t numofIterations = countIterations(complexCoord);
-                Uint8 r, g, b;
-                iterationsToRGB(numofIterations, r, g, b);
-                m_vArray[j + i * m_pixel_size.x].color = { r,g,b };
+                for (int x = 0; x < m_pixel_size.x; ++x)
+                {
+                    int index = x + y * m_pixel_size.x;
+                    m_vArray[index].position = { static_cast<float>(x), static_cast<float>(y) };
+
+                    Vector2f coord = mapPixelToCoords({ x, y });
+                    size_t iter = countIterations(coord);
+
+                    Uint8 r, g, b;
+                    iterationsToRGB(iter, r, g, b);
+
+                    m_vArray[index].color = Color(r, g, b);
+                }
             }
-        }
-        m_state = Displaying;
+            });
     }
-}
+
+    for (auto& thread : threads)
+        thread.join();
+
+    m_state = Displaying;
+}  }
+
 
 void ComplexPlane::zoomIn()
 {
