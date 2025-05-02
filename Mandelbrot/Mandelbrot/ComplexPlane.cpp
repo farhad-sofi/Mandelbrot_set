@@ -182,3 +182,5 @@ Vector2f ComplexPlane::mapPixelToCoords(Vector2i mousePixel)
     return Vector2f(real, imag);
 }
 
+//Partners : Brandon Hom, Farhad Sofizada
+
